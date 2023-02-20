@@ -26,14 +26,6 @@ describe('app', () => {
                     })
              })
         })
-        // it('400: Bad request - should return a 400 status code and error message when the requested table is invalid', () => {
-        //     return request(app)
-        //         .get('/api/invalid_table')
-        //         .expect(400)
-        //         .then(({body})=> {
-        //             console.log(body)
-        //             expect(body.msg).toBe("Bad request")
-        //         })
-        // })
+      
     })
 })

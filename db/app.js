@@ -3,18 +3,13 @@ const app = express();
 const {
     getCategories
 } = require('../db/controllers/categoryControllers');
-const { 
-    handle500Errors, 
-    handleCustomErrors,
-    handle400Errors 
-} = require('./controllers/error-handling-controllers')
+
 
 app.get('/api/categories', getCategories)
 
-app.use(handle400Errors)
-
-app.use(handleCustomErrors)
-
-app.use(handle500Errors)
+app.use((err, req, res, next)=> {
+    console.log(err);
+    res.status(500).send({msg: "Server error"})
+})
 
 module.exports = app
