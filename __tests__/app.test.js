@@ -81,5 +81,13 @@ describe('app', () => {
                     expect(review).toHaveProperty('votes', expect.any(Number));
              })
         })
+        it('400: Bad request - should respond with an error message of Bad Request when a user inputs an invalid parameter', () => {
+            return request(app)
+                    .get('/api/reviews/not-a-valid-review_id')
+                    .expect(400)
+                    .then(({body})=> {
+                        expect(body.msg).toBe("Bad Request")
+                    })
+        })
      })
 })
