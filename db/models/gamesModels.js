@@ -41,7 +41,6 @@ exports.selectCommentsByReviewID = (review_id) => {
         JOIN reviews 
         ON reviews.review_id = comments.review_id
         WHERE reviews.review_id = $1`, [review_id]).then(({rows})=> {
-            console.log(rows);
             return rows
         })
 }

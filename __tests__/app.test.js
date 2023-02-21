@@ -116,8 +116,13 @@ describe('app', () => {
                 })
             })
         })
-        // it('400: GET - should return an error message of Bad Request when a user input an invalid parameter', () => {
-
-        // })
+        it('400: GET - should return an error message of Bad Request when a user input an invalid parameter', () => {
+            return request(app)
+                .get('/api/reviews/not-a-valid-input/comments')
+                .expect(400)
+                .then(({body})=> {
+                expect(body.msg).toBe("Bad Request")
+                })
+        })
      })
 })
