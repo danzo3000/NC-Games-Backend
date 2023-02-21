@@ -3,6 +3,7 @@ const seed = require('../db/seeds/seed');
 const app = require('../db/app');
 const connection = require('../db/connection');
 const testData = require('../db/data/test-data/index');
+require('jest-sorted')
 
 beforeEach(()=> {
     return seed(testData)
@@ -48,5 +49,18 @@ describe('app', () => {
                 })
                 })
         })
-    })
+        it('200: GET - should return an array of review objects sorted by date in descending order', () => {
+            return request(app)
+                    .get('/api/reviews')
+                    .expect(200)
+                    .then(({body})=> {
+                    expect(body.reviews).toHaveLength(13);
+                    expect(body.reviews).toBeSorted({
+                        key: 'created_at',
+                        descending: true
+            })
+            });
+                    
+            })
+        })
 })
