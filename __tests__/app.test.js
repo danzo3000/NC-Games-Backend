@@ -98,4 +98,26 @@ describe('app', () => {
                     })
         })
      })
+     describe('/api/reviews/:review_id/comments', () => {
+        it('200: GET - should return an array of comments according to the review_id parameter', () => {
+            return request(app)
+                    .get('/api/reviews/2/comments')
+                    .expect(200)
+                    .then(({body})=> {
+                    const comments = body.comments;
+                    expect(comments).toHaveLength(3);
+                    comments.forEach((comment)=> {
+                    expect(comment).toHaveProperty('comment_id', expect.any(Number));
+                    expect(comment).toHaveProperty('votes', expect.any(Number));
+                    expect(comment).toHaveProperty('created_at', expect.any(String));
+                    expect(comment).toHaveProperty('author', expect.any(String));
+                    expect(comment).toHaveProperty('body', expect.any(String));
+                    expect(comment).toHaveProperty('review_id', expect.any(Number));
+                })
+            })
+        })
+        // it('400: GET - should return an error message of Bad Request when a user input an invalid parameter', () => {
+
+        // })
+     })
 })

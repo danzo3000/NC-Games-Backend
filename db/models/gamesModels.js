@@ -32,3 +32,16 @@ exports.selectReviewByID = (review_id) => {
             return review
         })
 }
+
+exports.selectCommentsByReviewID = (review_id) => {
+    return db
+        .query(`
+        SELECT * 
+        FROM comments 
+        JOIN reviews 
+        ON reviews.review_id = comments.review_id
+        WHERE reviews.review_id = $1`, [review_id]).then(({rows})=> {
+            console.log(rows);
+            return rows
+        })
+}
