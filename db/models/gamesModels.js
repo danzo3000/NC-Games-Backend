@@ -27,7 +27,7 @@ exports.selectReviewByID = (review_id) => {
         SELECT * FROM reviews WHERE reviews.review_id = $1`, [review_id]).then(({rows})=> {
             const review = rows[0];
             if (!rows[0]) {
-                return Promise.reject("Bad Request")
+                return Promise.reject({status: 404, msg: "Not Found"})
             }
             return review
         })
