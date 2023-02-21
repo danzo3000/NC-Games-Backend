@@ -3,6 +3,7 @@ const seed = require('../db/seeds/seed');
 const app = require('../db/app');
 const connection = require('../db/connection');
 const testData = require('../db/data/test-data/index');
+require('jest-sorted')
 
 beforeEach(()=> {
     return seed(testData)
@@ -26,6 +27,40 @@ describe('app', () => {
                     })
              })
         })
-      
     })
+    describe('/api/reviews', () => {
+        it('200: GET - should return an array of review objects', () => {
+            return request(app)
+                .get('/api/reviews')
+                .expect(200)
+                .then(({body})=> {
+                expect(body.reviews).toHaveLength(13);
+                body.reviews.forEach((review)=> {
+                    expect(review).toHaveProperty('review_id', expect.any(Number));
+                    expect(review).toHaveProperty('owner', expect.any(String));
+                    expect(review).toHaveProperty('title', expect.any(String)); 
+                    expect(review).toHaveProperty('designer', expect.any(String)); expect(review).toHaveProperty('owner', expect.any(String)); 
+                    expect(review).toHaveProperty('category', expect.any(String));
+                    expect(review).toHaveProperty('review_img_url', expect.any(String));
+                    expect(review).toHaveProperty('review_body', expect.any(String));
+                    expect(review).toHaveProperty('created_at', expect.any(String));
+                    expect(review).toHaveProperty('votes', expect.any(Number));
+                   expect(review).toHaveProperty('comment_count', expect.any(Number))
+                })
+                })
+        })
+        it('200: GET - should return an array of review objects sorted by date in descending order', () => {
+            return request(app)
+                    .get('/api/reviews')
+                    .expect(200)
+                    .then(({body})=> {
+                    expect(body.reviews).toHaveLength(13);
+                    expect(body.reviews).toBeSorted({
+                        key: 'created_at',
+                        descending: true
+            })
+            });
+                    
+            })
+        })
 })
