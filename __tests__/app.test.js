@@ -54,6 +54,7 @@ describe('app', () => {
                     .get('/api/reviews')
                     .expect(200)
                     .then(({body})=> {
+                    console.log(body.reviews)
                     expect(body.reviews).toHaveLength(13);
                     expect(body.reviews).toBeSorted({
                         key: 'created_at',
@@ -116,6 +117,28 @@ describe('app', () => {
                 })
             })
         })
+        it('200: GET - should return an array of comments according to the review_id parameter sorted by date in descending order', () => {
+            return request(app)
+                .get('/api/reviews/3/comments')
+                .expect(200)
+                .then(({body})=> {
+                console.log(body.comments)
+                expect(body.comments).toHaveLength(3);
+                expect(body.comments).toBeSorted({
+                    key: 'created_at',
+                    descending: true
+                })
+            })
+        })
+        //CONTINUE ON THIS TEST ON WEDS
+        it('200: GET - should return an empty array if the review_id exists but has no comments', () => {
+            return request(app)
+                .get('/api/reviews/1/comments')
+                .expect(200)
+                .then(({body})=> {
+                expect(body.comments).toEqual([]);
+                })
+        })
         it('400: GET - should return an error message of Bad Request when a user input an invalid parameter', () => {
             return request(app)
                 .get('/api/reviews/not-a-valid-input/comments')
@@ -134,3 +157,4 @@ describe('app', () => {
         })
      })
 })
+
