@@ -59,8 +59,43 @@ describe('app', () => {
                         key: 'created_at',
                         descending: true
             })
-            });
+        });
                     
-            })
+       })
+    })
+    describe('/api/reviews/:review_id', () => {
+        it('200: GET - should respond with a single review object according to the review_id parameter', () => {
+            return request(app)
+                    .get('/api/reviews/2')
+                    .expect(200)
+                    .then(({body})=> {
+                    const review = body.review;
+                    expect(review).toHaveProperty('review_id', expect.any(Number));
+                    expect(review).toHaveProperty('owner', expect.any(String));
+                    expect(review).toHaveProperty('title', expect.any(String)); 
+                    expect(review).toHaveProperty('designer', expect.any(String)); 
+                    expect(review).toHaveProperty('category', expect.any(String));
+                    expect(review).toHaveProperty('review_img_url', expect.any(String));
+                    expect(review).toHaveProperty('review_body', expect.any(String));
+                    expect(review).toHaveProperty('created_at', expect.any(String));
+                    expect(review).toHaveProperty('votes', expect.any(Number));
+             })
         })
+        it('400: Bad request - should respond with an error message of Bad Request when a user inputs an invalid parameter', () => {
+            return request(app)
+                    .get('/api/reviews/not-a-valid-review_id')
+                    .expect(400)
+                    .then(({body})=> {
+                        expect(body.msg).toBe("Bad Request")
+                    })
+        })
+        it('404: Not found - should respond with an error message of Not Found when a user inputs a valid but non-existant parameter', () => {
+            return request(app)
+                    .get('/api/reviews/5000')
+                    .expect(404)
+                    .then(({body})=> {
+                     expect(body.msg).toBe("Not Found")
+                    })
+        })
+     })
 })

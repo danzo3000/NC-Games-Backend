@@ -21,3 +21,14 @@ exports.selectReviews = () => {
         })
 }
 
+exports.selectReviewByID = (review_id) => {
+    return db
+        .query(`
+        SELECT * FROM reviews WHERE reviews.review_id = $1`, [review_id]).then(({rows})=> {
+            const review = rows[0];
+            if (!rows[0]) {
+                return Promise.reject({status: 404, msg: "Not Found"})
+            }
+            return review
+        })
+}
