@@ -4,7 +4,10 @@ exports.getCategories = (req, res, next) => {
     selectCategories().then((categories)=> {
         res.status(200).send({categories})
     }).catch((err)=> {
-        console.log(err + " <<ERROR LOG")
         next(err)
     })
+}
+
+exports.getReviewByID = (req, res, next) => {
+
 }
