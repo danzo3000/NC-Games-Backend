@@ -41,6 +41,9 @@ exports.selectCommentsByReviewID = (review_id) => {
         JOIN reviews 
         ON reviews.review_id = comments.review_id
         WHERE reviews.review_id = $1`, [review_id]).then(({rows})=> {
+            if (rows.length === 0) {
+                return Promise.reject({status: 404, msg: "Review ID not found"})
+            }
             return rows
         })
 }
