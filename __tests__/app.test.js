@@ -54,6 +54,7 @@ describe('app', () => {
                     .get('/api/reviews')
                     .expect(200)
                     .then(({body})=> {
+                    console.log(body.reviews)
                     expect(body.reviews).toHaveLength(13);
                     expect(body.reviews).toBeSorted({
                         key: 'created_at',
@@ -89,7 +90,7 @@ describe('app', () => {
                         expect(body.msg).toBe("Bad Request")
                     })
         })
-        it('404: Not found - should respond with an error message of Not Found when a user inputs a valid but non-existant parameter', () => {
+        it('404: Not found - should respond with an error message of Not Found when a user inputs a valid but non-existent parameter', () => {
             return request(app)
                     .get('/api/reviews/5000')
                     .expect(404)
@@ -98,4 +99,61 @@ describe('app', () => {
                     })
         })
      })
+     describe('/api/reviews/:review_id/comments', () => {
+        it('200: GET - should return an array of comments according to the review_id parameter', () => {
+            return request(app)
+                    .get('/api/reviews/2/comments')
+                    .expect(200)
+                    .then(({body})=> {
+                    const comments = body.comments;
+                    expect(comments).toHaveLength(3);
+                    comments.forEach((comment)=> {
+                    expect(comment).toHaveProperty('comment_id', expect.any(Number));
+                    expect(comment).toHaveProperty('votes', expect.any(Number));
+                    expect(comment).toHaveProperty('created_at', expect.any(String));
+                    expect(comment).toHaveProperty('author', expect.any(String));
+                    expect(comment).toHaveProperty('body', expect.any(String));
+                    expect(comment).toHaveProperty('review_id', expect.any(Number));
+                })
+            })
+        })
+        it('200: GET - should return an array of comments according to the review_id parameter sorted by date in descending order', () => {
+            return request(app)
+                .get('/api/reviews/3/comments')
+                .expect(200)
+                .then(({body})=> {
+                console.log(body.comments)
+                expect(body.comments).toHaveLength(3);
+                expect(body.comments).toBeSorted({
+                    key: 'created_at',
+                    descending: true
+                })
+            })
+        })
+        it('200: GET - should return an empty array if the review_id exists but has no comments', () => {
+            return request(app)
+                .get('/api/reviews/1/comments')
+                .expect(200)
+                .then(({body})=> {
+                expect(body.comments).toEqual([]);
+                })
+        })
+        it('400: GET - should return an error message of Bad Request when a user input an invalid parameter', () => {
+            return request(app)
+                .get('/api/reviews/not-a-valid-input/comments')
+                .expect(400)
+                .then(({body})=> {
+                expect(body.msg).toBe("Bad Request")
+                })
+        })
+        it('404: GET - should return an error message of Review ID not found when a user inputs a valid but non-existent parameter', () => {
+            return request(app)
+                .get('/api/reviews/1000/comments')
+                .expect(404)
+                .then(({body})=> {
+                expect(body.msg).toBe("Review ID not found")
+                })
+        })
+     })
 })
+

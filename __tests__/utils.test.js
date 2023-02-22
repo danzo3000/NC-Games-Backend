@@ -2,7 +2,9 @@ const {
 	convertTimestampToDate,
 	createRef,
 	formatComments,
+	checkReviewExists
 } = require("../db/seeds/utils");
+
 
 describe("convertTimestampToDate", () => {
 	test("returns a new object", () => {
@@ -102,3 +104,18 @@ describe("formatComments", () => {
 		expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
 	});
 });
+
+
+// describe("checkReviewExists", () => {
+//     test("should return a single review if passed a value that exists and has an entry", () => {
+// 		checkReviewExists(1).then((review)=> {
+// 			expect(review).toHaveLength(1);
+// 		})
+// 	});
+// 	test("should return an empty array when passed a value which is valid but non-existent", () => {
+// 		checkReviewExists(900).then((review)=> {
+// 			console.log(review)
+// 		expect(review).toEqual([]);
+// 		})
+// 	})
+// })

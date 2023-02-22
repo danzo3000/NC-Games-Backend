@@ -4,7 +4,8 @@ const app = express();
 const {
     getCategories,
     getReviews,
-    getReviewByID
+    getReviewByID,
+    getCommentsByReviewID
 } = require('./controllers/gamesControllers');
 
 app.get('/api/categories', getCategories)
@@ -12,6 +13,8 @@ app.get('/api/categories', getCategories)
 app.get('/api/reviews', getReviews)
 
 app.get('/api/reviews/:review_id', getReviewByID)
+
+app.get('/api/reviews/:review_id/comments', getCommentsByReviewID)
 
 app.use(handleCustomErrors)
 app.use(handle400Errors)

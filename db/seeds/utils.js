@@ -1,3 +1,6 @@
+const format = require('pg-format');
+const db = require('../connection');
+
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 	if (!created_at) return { ...otherProperties };
 	return { created_at: new Date(created_at), ...otherProperties };
@@ -20,3 +23,18 @@ exports.formatComments = (comments, idLookup) => {
 		};
 	});
 };
+
+exports.checkReviewExists = (review_id) => {
+	return db.query(`
+          SELECT *
+          FROM reviews
+          WHERE review_id = $1`, [review_id]).then((result)=> {
+            if (result.rows.length === 0) {
+				return Promise.reject({status: 404, msg: "Review ID not found"})
+			}
+			else {
+				return []
+			}
+		
+        })
+}
