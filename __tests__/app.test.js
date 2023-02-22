@@ -154,6 +154,40 @@ describe('app', () => {
                 expect(body.msg).toBe("Review ID not found")
                 })
         })
+        it('201: POST - should respond with the posted comment which has two properties of username and body', () => {
+            const reqBody = {
+                'username': 'bainesface',
+                'body': 'Some Test Body Example Text'
+            };
+            return request(app)
+                .post('/api/reviews/1/comments')
+                .send(reqBody)
+                .expect(201)
+                .then(({body})=> {
+                console.log(body, "TEST BODY")
+                expect(body.comment).toHaveProperty('votes', expect.any(Number));
+                expect(body.comment).toHaveProperty('created_at', expect.any(String));
+                expect(body.comment).toHaveProperty('comment_id', expect.any(Number));
+                expect(body.comment.author).toBe('bainesface');
+                expect(body.comment.body).toBe('Some Test Body Example Text');
+                expect(body.comment.review_id).toBe(1);
+             })
+        })
+        it('400: POST - should return an error message of Bad Request when a user inputs an invalid review_id', () => {
+            const reqBody = {
+                'username': 'bainesface',
+                'body': 'Some Test Body Example Text'
+            };
+            return request(app)
+                .post('/api/reviews/not-a-valid-id/comments')
+                .send(reqBody)
+                .expect(400)
+                .then(({body})=> {
+                expect(body.msg).toBe("Bad Request")
+                })
+        })
+        
      })
+     
 })
 

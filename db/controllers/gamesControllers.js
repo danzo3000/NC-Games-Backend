@@ -1,4 +1,9 @@
-const { selectCategories, selectReviews, selectReviewByID, selectCommentsByReviewID } = require('../models/gamesModels')
+const { selectCategories, 
+    selectReviews, 
+    selectReviewByID, 
+    selectCommentsByReviewID, 
+    insertCommentByReviewID 
+} = require('../models/gamesModels')
 
 exports.getCategories = (req, res, next) => {
     selectCategories().then((categories)=> {
@@ -33,3 +38,12 @@ exports.getCommentsByReviewID = (req, res, next) => {
     })
 }
 
+exports.postCommentByReviewID = (req, res, next) => {
+    const {username, body} = req.body;
+    const {review_id} = req.params;
+    insertCommentByReviewID(username, body, review_id).then((comment)=> {
+        res.status(201).send({comment})
+    }).catch((err)=> {
+        next(err)
+    })
+}
