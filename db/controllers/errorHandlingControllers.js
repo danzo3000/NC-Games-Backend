@@ -14,7 +14,7 @@ exports.handle400Errors = (err, req, res, next) => {
 }
 
 exports.handleCustomErrors = (err, req, res, next) => {
-    if (err.msg) {
+    if (err.status && err.msg) {
         res.status(err.status).send({msg: err.msg})
     }
     next(err)

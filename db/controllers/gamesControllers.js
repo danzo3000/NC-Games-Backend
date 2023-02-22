@@ -28,6 +28,7 @@ exports.getCommentsByReviewID = (req, res, next) => {
     selectCommentsByReviewID(review_id).then((comments)=>{
         res.status(200).send({comments})
     }).catch((error)=>{
+        console.log(error)
         next(error)
     })
 }

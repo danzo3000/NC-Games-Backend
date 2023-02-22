@@ -1,4 +1,5 @@
 const db = require('../connection');
+const { checkReviewExists } = require('../seeds/utils');
 
 
 exports.selectCategories = () => {
@@ -40,9 +41,15 @@ exports.selectCommentsByReviewID = (review_id) => {
         FROM comments 
         WHERE comments.review_id = $1
         ORDER BY comments.created_at DESC`, [review_id]).then(({rows})=> {
-            if (rows.length === 0) { //NEED TO CHECK WHETHER THE review_id EXISTS USING A CHECK FUNCTION TO DECIDE WHETHER TO SEND BACK AN ERROR OR THE EMPTY ARRAY 
-                return Promise.reject({status: 404, msg: "Review ID not found"})
-            }
-            return rows
+            
+            if (rows.length === 0) {
+                return checkReviewExists(review_id)}
+                else {
+                return rows
+                }
+        
+        }).then((result)=> {
+               
+          return result
         })
-}
+    }

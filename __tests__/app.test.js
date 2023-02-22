@@ -130,7 +130,6 @@ describe('app', () => {
                 })
             })
         })
-        //CONTINUE ON THIS TEST ON WEDS
         it('200: GET - should return an empty array if the review_id exists but has no comments', () => {
             return request(app)
                 .get('/api/reviews/1/comments')
@@ -147,9 +146,9 @@ describe('app', () => {
                 expect(body.msg).toBe("Bad Request")
                 })
         })
-        it('404: GET - should return an error message of Not Found when a user inputs a valid but non-existent parameter', () => {
+        it('404: GET - should return an error message of Review ID not found when a user inputs a valid but non-existent parameter', () => {
             return request(app)
-                .get('/api/reviews/5000/comments')
+                .get('/api/reviews/1000/comments')
                 .expect(404)
                 .then(({body})=> {
                 expect(body.msg).toBe("Review ID not found")
