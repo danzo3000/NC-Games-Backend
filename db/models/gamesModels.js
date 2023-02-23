@@ -1,5 +1,5 @@
 const db = require("../connection");
-const { checkReviewExists } = require("../seeds/utils");
+const { checkReviewExists, checkCategoryExists } = require("../seeds/utils");
 
 exports.selectCategories = () => {
   return db
@@ -51,7 +51,9 @@ exports.selectReviews = (category, sort_by, order) => {
   console.log(fullQueryString, "<<fullQueryString");
 
   return db.query(fullQueryString).then(({ rows }) => {
-    if (rows.length === 1) {
+    if (rows.length === 0) {
+      return checkCategoryExists(category);
+    } else if (rows.length === 1) {
       return rows[0];
     } else {
       return rows;

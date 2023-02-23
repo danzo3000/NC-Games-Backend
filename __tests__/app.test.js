@@ -384,6 +384,14 @@ describe("app", () => {
           });
         });
     });
+    // it.only("200: GET - should return an empty array if the query property and value are valid but have no results", () => {
+    //   return request(app)
+    //     .get("/api/reviews?category=children's games")
+    //     .expect(200)
+    //     .then(({ body }) => {
+    //       expect(body.reviews).toEqual([]);
+    //     });
+    // });
     it("400: GET - should return an error of Invalid query if the query property is invalid", () => {
       return request(app)
         .get("/api/reviews?not-a-valid-query=votes")
@@ -392,12 +400,12 @@ describe("app", () => {
           expect(body.msg).toBe("Invalid query");
         });
     });
-    it("400: GET - should return an error of Invalid Query Value if the query property is valid but its value invalid", () => {
+    it("404: GET - should return an error of Not found if the query property is valid and its value is in a valid format but doesn not exist", () => {
       return request(app)
-        .get("/api/reviews?category=not-a-valid-value")
-        .expect(400)
+        .get("/api/reviews?category=valid-but-non-existent")
+        .expect(404)
         .then(({ body }) => {
-          expect(body.msg).toBe("Invalid query value");
+          expect(body.msg).toBe("Not found");
         });
     });
   });
