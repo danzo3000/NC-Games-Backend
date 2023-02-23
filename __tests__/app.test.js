@@ -329,6 +329,61 @@ describe("app", () => {
           expect(review).toHaveProperty("created_at", expect.any(String));
         });
     });
+    it("200: GET - should return an array of review objects matching the queried category when passed a valid query if there are multiple matches", () => {
+      return request(app)
+        .get("/api/reviews?category='social deduction'")
+        .expect(200)
+        .then(({ body }) => {
+          const reviews = body.reviews;
+          expect(reviews).toHaveLength(11);
+          reviews.forEach((review) => {
+            expect(review.category).toBe("social deduction");
+            expect(review).toHaveProperty("review_id", expect.any(Number));
+            expect(review).toHaveProperty("owner", expect.any(String));
+            expect(review).toHaveProperty("title", expect.any(String));
+            expect(review).toHaveProperty("designer", expect.any(String));
+            expect(review).toHaveProperty("review_img_url", expect.any(String));
+            expect(review).toHaveProperty("review_body", expect.any(String));
+            expect(review).toHaveProperty("created_at", expect.any(String));
+          });
+        });
+    });
+    it("200: GET - should return an array of review objects sorted by the passed sort_by query in descending order when a valid query is passed", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews).toHaveLength(13);
+          expect(body.reviews).toBeSorted({
+            key: "votes",
+            descending: true,
+          });
+        });
+    });
+    it("200: GET - should return an array of review objects sorted by the default created_at in ascending order if an order query of asc is passed without a sort_by query", () => {
+      return request(app)
+        .get("/api/reviews?order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews).toHaveLength(13);
+          expect(body.reviews).toBeSorted({
+            key: "created_at",
+            descening: false,
+          });
+        });
+    });
+    it("200: GET - should return an array of review objects sorted by the passed sort_by query and in ascending order when passed both an order and sort_by query", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes&order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews).toHaveLength(13);
+          expect(body.reviews).toBeSorted({
+            key: "votes",
+            descending: false,
+          });
+        });
+    });
   });
   describe("/api/users", () => {
     it("200: GET - should respond with an array of user objects", () => {
