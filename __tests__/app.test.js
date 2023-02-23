@@ -242,5 +242,74 @@ describe("app", () => {
           expect(body.msg).toBe("Review ID not found");
         });
     });
+    it("201: POST - should respond with the posted comment which has two properties of username and body", () => {
+      const reqBody = {
+        username: "bainesface",
+        body: "Some Test Body Example Text",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(reqBody)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.comment).toHaveProperty("votes", expect.any(Number));
+          expect(body.comment).toHaveProperty("created_at", expect.any(String));
+          expect(body.comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(body.comment.author).toBe("bainesface");
+          expect(body.comment.body).toBe("Some Test Body Example Text");
+          expect(body.comment.review_id).toBe(1);
+        });
+    });
+    it("400: POST - should return an error message of Bad Request when a user inputs an invalid review_id", () => {
+      const reqBody = {
+        username: "bainesface",
+        body: "Some Test Body Example Text",
+      };
+      return request(app)
+        .post("/api/reviews/not-a-valid-id/comments")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("404: POST - should return an error message of Not found when passed a review_id which is valid but non-existent", () => {
+      const reqBody = {
+        username: "bainesface",
+        body: "Some Test Body Example Text",
+      };
+      return request(app)
+        .post("/api/reviews/1000/comments")
+        .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not found");
+        });
+    });
+    it("400: POST - should respond with a 400 when a required field is missing from the post object", () => {
+      const reqBody = {
+        username: "bainesface",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field");
+        });
+    });
+    it("404: POST - should respond with a 404 error when the username passed on the post object does not exist", () => {
+      const reqBody = {
+        username: "user-does-not-exist",
+        body: "Some Test Body Example Text",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not found");
+        });
+    });
   });
 });
