@@ -185,7 +185,7 @@ describe("app", () => {
           expect(body.msg).toBe("Bad Request");
         });
     });
-    it("400: POST - should return an error message of Bad request when passed a review_id which is valid but non-existent", () => {
+    it("404: POST - should return an error message of Not found when passed a review_id which is valid but non-existent", () => {
       const reqBody = {
         username: "bainesface",
         body: "Some Test Body Example Text",
@@ -193,9 +193,34 @@ describe("app", () => {
       return request(app)
         .post("/api/reviews/1000/comments")
         .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not found");
+        });
+    });
+    it("400: POST - should respond with a 400 when a required field is missing from the post object", () => {
+      const reqBody = {
+        username: "bainesface",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(reqBody)
         .expect(400)
         .then(({ body }) => {
-          expect(body.msg).toBe("Bad Request");
+          expect(body.msg).toBe("Missing required field");
+        });
+    });
+    it("404: POST - should respond with a 404 error when the username passed on the post object does not exist", () => {
+      const reqBody = {
+        username: "user-does-not-exist",
+        body: "Some Test Body Example Text",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not found");
         });
     });
   });
