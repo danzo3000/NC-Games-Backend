@@ -152,6 +152,40 @@ describe("app", () => {
           expect(body.msg).toBe("Review_id not found");
         });
     });
+    it("400: PATCH - should respond with a 400 bad request message when a patch request is made to an invalid review_id", () => {
+      const reqBody = {
+        inc_votes: 5,
+      };
+      return request(app)
+        .patch("/api/reviews/not-a-valid-path")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("400: PATCH - should respond with a 400 Bad reuqest if the inc_votes property has an invalid input value", () => {
+      const reqBody = {
+        inc_votes: "invalid-input",
+      };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("400: PATCH - should respond with a 400 Missing required field if the inc_votes property is missing", () => {
+      const reqBody = {};
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field");
+        });
+    });
   });
   describe("/api/reviews/:review_id/comments", () => {
     it("200: GET - should return an array of comments according to the review_id parameter", () => {
