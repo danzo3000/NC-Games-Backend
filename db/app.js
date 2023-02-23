@@ -1,23 +1,32 @@
-const express = require('express');
-const { handle500Errors, handle400Errors, handleCustomErrors} = require('./controllers/errorHandlingControllers');
+const express = require("express");
+const {
+  handle500Errors,
+  handle400Errors,
+  handleCustomErrors,
+} = require("./controllers/errorHandlingControllers");
 const app = express();
 const {
-    getCategories,
-    getReviews,
-    getReviewByID,
-    getCommentsByReviewID
-} = require('./controllers/gamesControllers');
+  getCategories,
+  getReviews,
+  getReviewByID,
+  getCommentsByReviewID,
+  patchReviewByID,
+} = require("./controllers/gamesControllers");
 
-app.get('/api/categories', getCategories)
+app.use(express.json());
 
-app.get('/api/reviews', getReviews)
+app.get("/api/categories", getCategories);
 
-app.get('/api/reviews/:review_id', getReviewByID)
+app.get("/api/reviews", getReviews);
 
-app.get('/api/reviews/:review_id/comments', getCommentsByReviewID)
+app.get("/api/reviews/:review_id", getReviewByID);
 
-app.use(handleCustomErrors)
-app.use(handle400Errors)
-app.use(handle500Errors)
+app.patch("/api/reviews/:review_id", patchReviewByID);
 
-module.exports = app
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
+
+app.use(handleCustomErrors);
+app.use(handle400Errors);
+app.use(handle500Errors);
+
+module.exports = app;
