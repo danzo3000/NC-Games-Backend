@@ -98,14 +98,14 @@ describe("app", () => {
           expect(body.msg).toBe("Not Found");
         });
     });
-    it("201: PATCH - should respond with a review object with its votes property incremented when passed a patch object with a positive key of inc_votes", () => {
+    it("200: PATCH - should respond with a review object with its votes property incremented when passed a patch object with a positive key of inc_votes", () => {
       const reqBody = {
         inc_votes: 5,
       };
       return request(app)
         .patch("/api/reviews/3")
         .send(reqBody)
-        .expect(201)
+        .expect(200)
         .then(({ body }) => {
           const review = body.review;
           expect(review.votes).toBe(10);
