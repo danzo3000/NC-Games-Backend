@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   handle500Errors,
-  handle400Errors,
+  handlePSQLErrors,
   handleCustomErrors,
 } = require("./controllers/errorHandlingControllers");
 const app = express();
@@ -26,7 +26,7 @@ app.patch("/api/reviews/:review_id", patchReviewByID);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.use(handleCustomErrors);
-app.use(handle400Errors);
+app.use(handlePSQLErrors);
 app.use(handle500Errors);
 
 module.exports = app;
