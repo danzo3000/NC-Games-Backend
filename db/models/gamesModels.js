@@ -14,17 +14,49 @@ exports.selectCategories = () => {
     });
 };
 
-exports.selectReviews = () => {
-  return db
-    .query(
-      `SELECT reviews.*, CAST(COUNT(comments.review_id) AS INT) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id GROUP BY reviews.review_id ORDER BY reviews.created_at DESC;
-        `
-    )
-    .then((response) => {
-      const reviews = response.rows;
+exports.selectReviews = (category, sort_by, order) => {
+  if (!sort_by) {
+    sort_by = "created_at";
+  }
 
-      return reviews;
-    });
+  if (!order) {
+    order = "desc";
+  }
+
+  let queryStringStart = `SELECT reviews.*, CAST(COUNT(comments.review_id) AS INT) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
+
+  if (category) {
+    queryStringStart += ` WHERE category = ${category}`;
+  }
+  const validOrderBy = [
+    "title",
+    "designer",
+    "owner",
+    "review_body",
+    "category",
+    "created_at",
+    "votes",
+  ];
+  const validOrder = ["asc", "desc"];
+
+  let queryStringEnd = " GROUP BY reviews.review_id";
+
+  if (validOrderBy.includes(sort_by) && validOrder.includes(order)) {
+    queryStringEnd += ` ORDER BY ${sort_by} ${order};`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+
+  const fullQueryString = queryStringStart.concat(queryStringEnd);
+  console.log(fullQueryString, "<<fullQueryString");
+
+  return db.query(fullQueryString).then(({ rows }) => {
+    if (rows.length === 1) {
+      return rows[0];
+    } else {
+      return rows;
+    }
+  });
 };
 
 exports.selectReviewByID = (review_id) => {

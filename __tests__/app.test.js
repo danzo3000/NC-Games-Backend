@@ -312,6 +312,24 @@ describe("app", () => {
         });
     });
   });
+  describe("/api/reviews?category=:category", () => {
+    it("200: GET - should return a single review object matching the queried category when passed a valid query if there is only 1 match ", () => {
+      return request(app)
+        .get("/api/reviews?category='dexterity'")
+        .expect(200)
+        .then(({ body }) => {
+          const review = body.reviews;
+          expect(review.category).toBe("dexterity");
+          expect(review).toHaveProperty("review_id", expect.any(Number));
+          expect(review).toHaveProperty("owner", expect.any(String));
+          expect(review).toHaveProperty("title", expect.any(String));
+          expect(review).toHaveProperty("designer", expect.any(String));
+          expect(review).toHaveProperty("review_img_url", expect.any(String));
+          expect(review).toHaveProperty("review_body", expect.any(String));
+          expect(review).toHaveProperty("created_at", expect.any(String));
+        });
+    });
+  });
   describe("/api/users", () => {
     it("200: GET - should respond with an array of user objects", () => {
       return request(app)
