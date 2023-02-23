@@ -11,6 +11,8 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     res.status(400).send({ msg: "Missing required field" });
   } else if (err.code === "23503") {
     res.status(404).send({ msg: "Not found" });
+  } else if (err.code === "42703") {
+    res.status(400).send({ msg: "Invalid query value" });
   } else {
     next(err);
   }

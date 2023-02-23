@@ -392,6 +392,14 @@ describe("app", () => {
           expect(body.msg).toBe("Invalid query");
         });
     });
+    it("400: GET - should return an error of Invalid Query Value if the query property is valid but its value invalid", () => {
+      return request(app)
+        .get("/api/reviews?category=not-a-valid-value")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid query value");
+        });
+    });
   });
   describe("/api/users", () => {
     it("200: GET - should respond with an array of user objects", () => {

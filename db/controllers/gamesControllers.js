@@ -28,9 +28,13 @@ exports.getReviews = (req, res, next) => {
     }
   }
 
-  selectReviews(category, sort_by, order).then((reviews) => {
-    res.status(200).send({ reviews });
-  });
+  selectReviews(category, sort_by, order)
+    .then((reviews) => {
+      res.status(200).send({ reviews });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
 exports.getReviewByID = (req, res, next) => {
