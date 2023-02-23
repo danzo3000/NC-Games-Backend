@@ -81,3 +81,15 @@ exports.insertCommentByReviewID = (author, body, review_id) => {
       }
     });
 };
+
+exports.selectUsers = () => {
+  return db
+    .query(
+      `SELECT *
+      FROM users;`
+    )
+    .then(({ rows }) => {
+      const users = rows;
+      return users;
+    });
+};

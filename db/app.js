@@ -12,6 +12,7 @@ const {
   getReviewByID,
   getCommentsByReviewID,
   postCommentByReviewID,
+  getUsers,
 } = require("./controllers/gamesControllers");
 
 app.use(express.json());
@@ -25,6 +26,8 @@ app.get("/api/reviews/:review_id", getReviewByID);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
+
+app.get("/api/users", getUsers);
 
 app.use("*", handleBadPaths); //keep between the controllers and error handlers
 

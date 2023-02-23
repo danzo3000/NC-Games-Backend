@@ -4,6 +4,7 @@ const {
   selectReviewByID,
   selectCommentsByReviewID,
   insertCommentByReviewID,
+  selectUsers,
 } = require("../models/gamesModels");
 
 exports.getCategories = (req, res, next) => {
@@ -53,5 +54,15 @@ exports.postCommentByReviewID = (req, res, next) => {
     })
     .catch((err) => {
       next(err);
+    });
+};
+
+exports.getUsers = (req, res, next) => {
+  selectUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((error) => {
+      next(error);
     });
 };
