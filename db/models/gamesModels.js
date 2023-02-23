@@ -76,6 +76,8 @@ exports.insertCommentByReviewID = (author, body, review_id) => {
     .then(({ rows }) => {
       if (!rows[0]) {
         return Promise.reject({ status: 404, msg: "Review ID not found" });
+      } else {
+        return rows[0];
       }
     });
 };

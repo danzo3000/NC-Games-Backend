@@ -198,6 +198,5 @@ describe("app", () => {
           expect(body.msg).toBe("Bad Request");
         });
     });
-    it("404: POST - should return an error message of Reference");
   });
 });
