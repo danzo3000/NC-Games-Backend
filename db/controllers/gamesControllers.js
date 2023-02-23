@@ -3,6 +3,7 @@ const {
   selectReviews,
   selectReviewByID,
   selectCommentsByReviewID,
+  updateReviewByID,
   insertCommentByReviewID,
 } = require("../models/gamesModels");
 
@@ -25,6 +26,18 @@ exports.getReviews = (req, res, next) => {
 exports.getReviewByID = (req, res, next) => {
   const review_id = req.params.review_id;
   selectReviewByID(review_id)
+    .then((review) => {
+      res.status(200).send({ review });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+exports.patchReviewByID = (req, res, next) => {
+  const { inc_votes } = req.body;
+  const { review_id } = req.params;
+  updateReviewByID(inc_votes, review_id)
     .then((review) => {
       res.status(200).send({ review });
     })

@@ -43,6 +43,26 @@ exports.selectReviewByID = (review_id) => {
     });
 };
 
+exports.updateReviewByID = (inc_votes, review_id) => {
+  return db
+    .query(
+      `
+      UPDATE reviews
+      SET
+      votes = votes + $1
+      WHERE review_id = $2
+      RETURNING *;`,
+      [inc_votes, review_id]
+    )
+    .then(({ rows }) => {
+      const review = rows[0];
+      if (!review) {
+        return Promise.reject({ status: 404, msg: "Review_id not found" });
+      }
+      return review;
+    });
+};
+
 exports.selectCommentsByReviewID = (review_id) => {
   return db
     .query(

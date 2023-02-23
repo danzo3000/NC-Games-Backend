@@ -98,6 +98,94 @@ describe("app", () => {
           expect(body.msg).toBe("Not Found");
         });
     });
+    it("200: PATCH - should respond with a review object with its votes property incremented when passed a patch object with a positive key of inc_votes", () => {
+      const reqBody = {
+        inc_votes: 5,
+      };
+      return request(app)
+        .patch("/api/reviews/3")
+        .send(reqBody)
+        .expect(200)
+        .then(({ body }) => {
+          const review = body.review;
+          expect(review.votes).toBe(10);
+          expect(review).toHaveProperty("review_id", expect.any(Number));
+          expect(review).toHaveProperty("owner", expect.any(String));
+          expect(review).toHaveProperty("title", expect.any(String));
+          expect(review).toHaveProperty("designer", expect.any(String));
+          expect(review).toHaveProperty("category", expect.any(String));
+          expect(review).toHaveProperty("review_img_url", expect.any(String));
+          expect(review).toHaveProperty("review_body", expect.any(String));
+          expect(review).toHaveProperty("created_at", expect.any(String));
+        });
+    });
+    it("200: PATCH - should respond with a review object with its votes property decremented when passed a patch object with a negative key of inc_votes", () => {
+      const reqBody = {
+        inc_votes: -4,
+      };
+      return request(app)
+        .patch("/api/reviews/3")
+        .send(reqBody)
+        .expect(200)
+        .then(({ body }) => {
+          const review = body.review;
+          expect(review.votes).toBe(1);
+          expect(review).toHaveProperty("review_id", expect.any(Number));
+          expect(review).toHaveProperty("owner", expect.any(String));
+          expect(review).toHaveProperty("title", expect.any(String));
+          expect(review).toHaveProperty("designer", expect.any(String));
+          expect(review).toHaveProperty("category", expect.any(String));
+          expect(review).toHaveProperty("review_img_url", expect.any(String));
+          expect(review).toHaveProperty("review_body", expect.any(String));
+          expect(review).toHaveProperty("created_at", expect.any(String));
+        });
+    });
+    it("404: PATCH - should respond with a custom error message when a patch request is made to a review_id which is in a valid format but does not exist", () => {
+      const reqBody = {
+        inc_votes: -4,
+      };
+      return request(app)
+        .patch("/api/reviews/3000")
+        .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Review_id not found");
+        });
+    });
+    it("400: PATCH - should respond with a 400 bad request message when a patch request is made to an invalid review_id", () => {
+      const reqBody = {
+        inc_votes: 5,
+      };
+      return request(app)
+        .patch("/api/reviews/not-a-valid-path")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("400: PATCH - should respond with a 400 Bad reuqest if the inc_votes property has an invalid input value", () => {
+      const reqBody = {
+        inc_votes: "invalid-input",
+      };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("400: PATCH - should respond with a 400 Missing required field if the inc_votes property is missing", () => {
+      const reqBody = {};
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field");
+        });
+    });
   });
   describe("/api/reviews/:review_id/comments", () => {
     it("200: GET - should return an array of comments according to the review_id parameter", () => {
