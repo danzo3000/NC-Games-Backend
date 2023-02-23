@@ -90,6 +90,10 @@ exports.selectUsers = () => {
     )
     .then(({ rows }) => {
       const users = rows;
-      return users;
+      if (!rows) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      } else {
+        return users;
+      }
     });
 };

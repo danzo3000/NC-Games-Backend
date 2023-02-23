@@ -238,5 +238,13 @@ describe("app", () => {
           });
         });
     });
+    it("404: GET - should send a custom 404 error message of Path not found if the path entered is invalid", () => {
+      return request(app)
+        .get("/api/not-a-valid-path")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Path not found");
+        });
+    });
   });
 });

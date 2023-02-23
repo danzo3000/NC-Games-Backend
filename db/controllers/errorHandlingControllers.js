@@ -24,5 +24,5 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handleBadPaths = (req, res, next) => {
-  res.status(404).send("Path not found");
+  res.status(404).send({ msg: "Path not found" });
 };
