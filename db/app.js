@@ -3,6 +3,7 @@ const {
   handle500Errors,
   handle400Errors,
   handleCustomErrors,
+  handleBadPaths,
 } = require("./controllers/errorHandlingControllers");
 const app = express();
 const {
@@ -24,6 +25,8 @@ app.get("/api/reviews/:review_id", getReviewByID);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
+
+app.use("*", handleBadPaths); //keep between the controllers and error handlers
 
 app.use(handleCustomErrors);
 app.use(handle400Errors);

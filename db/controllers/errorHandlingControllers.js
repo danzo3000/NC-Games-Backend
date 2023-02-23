@@ -22,3 +22,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
   }
   next(err);
 };
+
+exports.handleBadPaths = (req, res, next) => {
+  res.status(404).send("Path not found");
+};
