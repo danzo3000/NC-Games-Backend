@@ -101,3 +101,19 @@ exports.insertCommentByReviewID = (author, body, review_id) => {
       }
     });
 };
+
+exports.selectUsers = () => {
+  return db
+    .query(
+      `SELECT *
+      FROM users;`
+    )
+    .then(({ rows }) => {
+      const users = rows;
+      if (!rows) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      } else {
+        return users;
+      }
+    });
+};

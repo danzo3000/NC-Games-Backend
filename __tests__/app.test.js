@@ -312,4 +312,27 @@ describe("app", () => {
         });
     });
   });
+  describe("/api/users", () => {
+    it("200: GET - should respond with an array of user objects", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users).toHaveLength(4);
+          body.users.forEach((user) => {
+            expect(user).toHaveProperty("username", expect.any(String));
+            expect(user).toHaveProperty("name", expect.any(String));
+            expect(user).toHaveProperty("avatar_url", expect.any(String));
+          });
+        });
+    });
+    it("404: GET - should send a custom 404 error message of Path not found if the path entered is invalid", () => {
+      return request(app)
+        .get("/api/not-a-valid-path")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Path not found");
+        });
+    });
+  });
 });

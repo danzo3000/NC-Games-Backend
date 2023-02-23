@@ -3,6 +3,7 @@ const {
   handle500Errors,
   handlePSQLErrors,
   handleCustomErrors,
+  handleBadPaths,
 } = require("./controllers/errorHandlingControllers");
 const app = express();
 const {
@@ -12,6 +13,7 @@ const {
   getCommentsByReviewID,
   patchReviewByID,
   postCommentByReviewID,
+  getUsers,
 } = require("./controllers/gamesControllers");
 
 app.use(express.json());
@@ -27,6 +29,10 @@ app.patch("/api/reviews/:review_id", patchReviewByID);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
+
+app.get("/api/users", getUsers);
+
+app.use("*", handleBadPaths); //keep between the controllers and error handlers
 
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);
