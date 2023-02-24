@@ -80,6 +80,7 @@ describe("app", () => {
           expect(review).toHaveProperty("review_body", expect.any(String));
           expect(review).toHaveProperty("created_at", expect.any(String));
           expect(review).toHaveProperty("votes", expect.any(Number));
+          expect(review).toHaveProperty("comment_count", expect.any(Number));
         });
     });
     it("400: Bad request - should respond with an error message of Bad Request when a user inputs an invalid parameter", () => {
