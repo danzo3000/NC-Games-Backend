@@ -449,4 +449,25 @@ describe("app", () => {
         });
     });
   });
+  describe("/api/comments/:comment_id", () => {
+    it("204: DELETE - should delete the comment with the passed comment_id and send back a status 204 with no body content", () => {
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+    it("400: DELETE - should respond with an error of Bad Request if passed an invalid comment_id", () => {
+      return request(app)
+        .delete("/api/comments/not-a-valid-input")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("404: DELETE - should respond with an error of Not Found if passed a valid but non-existent comment_id", () => {
+      return request(app)
+        .delete("/api/comments/100")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Comment_id Not Found");
+        });
+    });
+  });
 });
