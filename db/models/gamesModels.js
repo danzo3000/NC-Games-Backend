@@ -1,5 +1,6 @@
 const db = require("../connection");
-const { checkReviewExists } = require("../seeds/utils");
+const format = require("pg-format");
+const { checkReviewExists, checkCategoryExists } = require("../seeds/utils");
 
 exports.selectCategories = () => {
   return db
@@ -14,17 +15,59 @@ exports.selectCategories = () => {
     });
 };
 
-exports.selectReviews = () => {
-  return db
-    .query(
-      `SELECT reviews.*, CAST(COUNT(comments.review_id) AS INT) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id GROUP BY reviews.review_id ORDER BY reviews.created_at DESC;
-        `
-    )
-    .then((response) => {
-      const reviews = response.rows;
+exports.selectReviews = (category, sort_by, order) => {
+  if (!sort_by) {
+    sort_by = "created_at";
+  }
 
-      return reviews;
-    });
+  if (!order) {
+    order = "desc";
+  }
+
+  let validQueries = [];
+  let queryStringStart = `SELECT reviews.*, CAST(COUNT(comments.review_id) AS INT) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
+
+  if (category) {
+    validQueries.push(category);
+    queryStringStart += ` WHERE category = $1`;
+  }
+
+  let queryStringEnd = ` GROUP BY reviews.review_id`;
+
+  const validOrderBy = [
+    "title",
+    "designer",
+    "owner",
+    "review_body",
+    "category",
+    "created_at",
+    "votes",
+  ];
+  const validOrder = ["asc", "desc"];
+
+  if (validOrderBy.includes(sort_by)) {
+    queryStringEnd += ` ORDER BY ${sort_by}`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+
+  if (validOrder.includes(order)) {
+    queryStringEnd += ` ${order};`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+
+  const fullQueryString = queryStringStart.concat(queryStringEnd);
+
+  return db.query(fullQueryString, validQueries).then(({ rows }) => {
+    if (rows.length === 0) {
+      return checkCategoryExists(category);
+    } else if (rows.length === 1) {
+      return rows[0];
+    } else {
+      return rows;
+    }
+  });
 };
 
 exports.selectReviewByID = (review_id) => {

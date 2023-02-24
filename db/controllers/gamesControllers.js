@@ -19,9 +19,21 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-  selectReviews().then((reviews) => {
-    res.status(200).send({ reviews });
-  });
+  let { category, sort_by, order } = req.query;
+  const validQueries = ["category", "order", "sort_by"];
+  const queryKeys = Object.keys(req.query);
+  if (queryKeys.length !== 0) {
+    if (!validQueries.includes(queryKeys[0])) {
+      return res.status(400).send({ msg: "Invalid query" });
+    }
+  }
+  selectReviews(category, sort_by, order)
+    .then((reviews) => {
+      res.status(200).send({ reviews });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
 exports.getReviewByID = (req, res, next) => {
