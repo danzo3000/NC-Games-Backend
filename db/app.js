@@ -4,7 +4,7 @@ const {
   handlePSQLErrors,
   handleCustomErrors,
   handleBadPaths,
-} = require("./controllers/errorHandlingControllers");
+} = require("../controllers/errorHandlingControllers");
 const app = express();
 const {
   getCategories,
@@ -15,7 +15,8 @@ const {
   postCommentByReviewID,
   getUsers,
   deleteComments,
-} = require("./controllers/gamesControllers");
+  sendEndpoints,
+} = require("../controllers/gamesControllers");
 
 app.use(express.json());
 
@@ -34,6 +35,8 @@ app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 app.get("/api/users", getUsers);
 
 app.delete("/api/comments/:comment_id", deleteComments);
+
+app.get("/api", sendEndpoints);
 
 app.use("*", handleBadPaths); //keep between the controllers and error handlers
 

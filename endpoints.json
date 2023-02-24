@@ -30,5 +30,91 @@
         }
       ]
     }
+  },
+  "GET /api/reviews/:review_id": {
+    "description": "serves a single review based on the parametric review_id",
+    "queries": [],
+    "exampleResponse": {
+      "title": "One Night Ultimate Werewolf",
+      "designer": "Akihisa Okui",
+      "owner": "happyamy2016",
+      "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "category": "hidden-roles",
+      "created_at": 1610964101251,
+      "votes": 5
+    }
+  },
+  "PATCH /api/reviews/review_id": {
+    "description": "serves a review object with its votes property incremented/decremented based on the value of the passed inc_votes property and the parametric review_id",
+    "queries": [],
+    "exampleResponse": {
+      "review_id": 3,
+      "title": "Ultimate Werewolf",
+      "category": "social deduction",
+      "designer": "Akihisa Okui",
+      "owner": "bainesface",
+      "review_body": "We couldn't find the werewolf!",
+      "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?w=700&h=700",
+      "created_at": "2021-01-18T10:01:41.251Z",
+      "votes": 10
+    }
+  },
+  "GET /api/reviews/:review_id/comments": {
+    "description": "serves an array of comments linked to the review based on the parametric review_id",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "comment_id": 5,
+        "body": "Now this is a story all about how, board games turned my life upside down",
+        "review_id": 2,
+        "author": "mallionaire",
+        "votes": 13,
+        "created_at": "2021-01-18T10:24:05.410Z"
+      },
+      {
+        "comment_id": 1,
+        "body": "I loved this game too!",
+        "review_id": 2,
+        "author": "bainesface",
+        "votes": 16,
+        "created_at": "2017-11-22T12:43:33.389Z"
+      },
+      {
+        "comment_id": 4,
+        "body": "EPIC board game!",
+        "review_id": 2,
+        "author": "bainesface",
+        "votes": 16,
+        "created_at": "2017-11-22T12:36:03.389Z"
+      }
+    ]
+  },
+  "POST /api/reviews/:review_id/comments": {
+    "description": "serves the newly-created comment object",
+    "queries": [],
+    "exampleResponse": {
+      "comment_id": 7,
+      "body": "Some Test Body Example Text",
+      "review_id": 1,
+      "author": "bainesface",
+      "votes": 0,
+      "created_at": "2023-02-24T14:08:49.455Z"
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of user objects",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "username": "mallionaire",
+        "name": "haz",
+        "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+      }
+    ]
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "serves a 204 status code and no content",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
