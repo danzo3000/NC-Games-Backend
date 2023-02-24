@@ -16,58 +16,6 @@ exports.selectCategories = () => {
 };
 
 exports.selectReviews = (category, sort_by, order) => {
-  //   if (!sort_by) {
-  //     sort_by = "created_at";
-  //   }
-
-  //   if (!order) {
-  //     order = "desc";
-  //   }
-
-  //   let queryStringStart = `SELECT reviews.*, CAST(COUNT(comments.review_id) AS INT) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
-  // if (!sort_by) {
-  //     sort_by = "created_at";
-  //   }
-
-  //   let validQueries = [];
-
-  //   if (category) {
-  //     queryStringStart += ` WHERE category = $1`;
-  //     validQueries.push(category);
-  //   }
-  //   const validOrderBy = [
-  //     "title",
-  //     "designer",
-  //     "owner",
-  //     "review_body",
-  //     "category",
-  //     "created_at",
-  //     "votes",
-  //   ];
-  //   const validOrder = ["asc", "desc"];
-
-  //   let queryStringEnd = ` GROUP BY reviews.review_id`;
-
-  //   if (validOrderBy.includes(sort_by) && validOrder.includes(order)) {
-  //     validQueries.push(sort_by, order);
-  //     queryStringEnd += ` ORDER BY $${validQueries.length} $${validQueries.length};`;
-  //   } else {
-  //     return Promise.reject({ status: 400, msg: "Bad Request" });
-  //   }
-
-  //   const fullQueryString = queryStringStart.concat(queryStringEnd);
-  //   console.log(fullQueryString);
-
-  //   return db.query(fullQueryString, validQueries).then(({ rows }) => {
-  //     if (rows.length === 0) {
-  //       return checkCategoryExists(category);
-  //     } else if (rows.length === 1) {
-  //       return rows[0];
-  //     } else {
-  //       return rows;
-  //     }
-  //   });
-
   if (!sort_by) {
     sort_by = "created_at";
   }
@@ -108,8 +56,6 @@ exports.selectReviews = (category, sort_by, order) => {
   }
 
   const fullQueryString = queryStringStart.concat(queryStringEnd);
-  console.log(fullQueryString);
-  console.log(validQueries);
 
   return db.query(fullQueryString, validQueries).then(({ rows }) => {
     if (rows.length === 0) {
