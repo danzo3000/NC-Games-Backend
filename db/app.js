@@ -38,7 +38,7 @@ app.delete("/api/comments/:comment_id", deleteComments);
 
 app.get("/api", sendEndpoints);
 
-app.use("*", handleBadPaths); //keep between the controllers and error handlers
+app.use("*", handleBadPaths);
 
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);

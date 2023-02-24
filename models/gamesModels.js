@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const format = require("pg-format");
 const { checkReviewExists, checkCategoryExists } = require("../db/seeds/utils");
 
 exports.selectCategories = () => {
