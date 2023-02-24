@@ -4,6 +4,7 @@ const app = require("../db/app");
 const connection = require("../db/connection");
 const testData = require("../db/data/test-data/index");
 require("jest-sorted");
+const endPoints = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(testData);
@@ -467,6 +468,17 @@ describe("app", () => {
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe("Comment_id Not Found");
+        });
+    });
+  });
+  describe("/api", () => {
+    it("200: GET - should return JSON text describing all the available endpoints", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          const endpoints = body.endPoints;
+          expect(endpoints).toEqual(endPoints);
         });
     });
   });

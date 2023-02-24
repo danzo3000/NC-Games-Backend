@@ -9,6 +9,8 @@ const {
   removeComments,
 } = require("../models/gamesModels");
 
+const endPoints = require("../endpoints.json");
+
 exports.getCategories = (req, res, next) => {
   selectCategories()
     .then((categories) => {
@@ -102,4 +104,8 @@ exports.deleteComments = (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+exports.sendEndpoints = (req, res, next) => {
+  res.status(200).send({ endPoints });
 };
