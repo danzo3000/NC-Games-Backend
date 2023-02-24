@@ -335,4 +335,9 @@ describe("app", () => {
         });
     });
   });
+  // describe('/api/comments/:comment_id', () => {
+  //   it('204: DELETE - should delete the comment with the passed comment_id and send back a status 204 with no body content', () => {
+
+  //   })
+  // })
 });
