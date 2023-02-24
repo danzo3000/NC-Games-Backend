@@ -53,6 +53,8 @@ exports.selectReviews = (category, sort_by, order) => {
 
   if (validOrder.includes(order)) {
     queryStringEnd += ` ${order};`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
   }
 
   const fullQueryString = queryStringStart.concat(queryStringEnd);

@@ -400,6 +400,22 @@ describe("app", () => {
           expect(body.msg).toBe("Invalid query");
         });
     });
+    it("400: GET - should return an error of Bad Request when passed an invalid sort_by argument", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=not-a-valid-input")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    it("400: GET - should return an error of Bad Request when passed an invalid order argument", () => {
+      return request(app)
+        .get("/api/reviews?order=not-a-valid-order")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
     it("404: GET - should return an error of Not found if the query property is valid and its value is in a valid format but does not exist", () => {
       return request(app)
         .get("/api/reviews?category=valid-but-non-existent")
