@@ -27,7 +27,6 @@ exports.getReviews = (req, res, next) => {
       return res.status(400).send({ msg: "Invalid query" });
     }
   }
-
   selectReviews(category, sort_by, order)
     .then((reviews) => {
       res.status(200).send({ reviews });

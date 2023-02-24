@@ -315,7 +315,7 @@ describe("app", () => {
   describe("/api/reviews?category=:category", () => {
     it("200: GET - should return a single review object matching the queried category when passed a valid query if there is only 1 match ", () => {
       return request(app)
-        .get("/api/reviews?category='dexterity'")
+        .get("/api/reviews?category=dexterity")
         .expect(200)
         .then(({ body }) => {
           const review = body.reviews;
@@ -331,7 +331,7 @@ describe("app", () => {
     });
     it("200: GET - should return an array of review objects matching the queried category when passed a valid query if there are multiple matches", () => {
       return request(app)
-        .get("/api/reviews?category='social deduction'")
+        .get("/api/reviews?category=social deduction")
         .expect(200)
         .then(({ body }) => {
           const reviews = body.reviews;
@@ -384,14 +384,14 @@ describe("app", () => {
           });
         });
     });
-    // it.only("200: GET - should return an empty array if the query property and value are valid but have no results", () => {
-    //   return request(app)
-    //     .get("/api/reviews?category=children's games")
-    //     .expect(200)
-    //     .then(({ body }) => {
-    //       expect(body.reviews).toEqual([]);
-    //     });
-    // });
+    it("200: GET - should return an empty array if the query property and value are valid but have no results", () => {
+      return request(app)
+        .get("/api/reviews?category=children's games")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews).toEqual([]);
+        });
+    });
     it("400: GET - should return an error of Invalid query if the query property is invalid", () => {
       return request(app)
         .get("/api/reviews?not-a-valid-query=votes")
@@ -400,7 +400,7 @@ describe("app", () => {
           expect(body.msg).toBe("Invalid query");
         });
     });
-    it("404: GET - should return an error of Not found if the query property is valid and its value is in a valid format but doesn not exist", () => {
+    it("404: GET - should return an error of Not found if the query property is valid and its value is in a valid format but does not exist", () => {
       return request(app)
         .get("/api/reviews?category=valid-but-non-existent")
         .expect(404)
